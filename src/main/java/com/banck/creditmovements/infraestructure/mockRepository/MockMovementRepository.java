@@ -18,7 +18,7 @@ public class MockMovementRepository implements MovementRepository {
     @Override
     public Mono<Movement> get(String credito) {
         Movement c = new Movement();
-        c.setCredit("34984545");
+        c.setMovement("34984545");
         c.setCustomer("CTP");
         return Mono.just(c);
     }
@@ -27,7 +27,7 @@ public class MockMovementRepository implements MovementRepository {
     public Flux<Movement> list() {
         List<Movement> lc = new ArrayList<>();
         Movement c = new Movement();
-        c.setCredit("34984545");
+        c.setMovement("34984545");
         c.setCustomer("CTP");
         lc.add(c);
         return Flux.fromIterable(lc);
@@ -49,22 +49,7 @@ public class MockMovementRepository implements MovementRepository {
     }
 
     @Override
-    public Flux<Movement> listByCustomer(String customer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCredit(String customer, String credit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCreditAndCreditType(String customer, String credit, String creditType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Flux<Movement> listByAccount(String account) {
+    public Flux<Movement> listBySchedule(String customer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -8,14 +8,30 @@ package com.banck.creditmovements.utils;
  *
  * @author jonavcar
  */
-public enum CustomerType {
-    LEGAL_PERSON("PJ") {
+public enum Modality {
+    //VENTANILLA
+    WINDOW("VT") {
         @Override
         public boolean equals(String customerType) {
             return value.equals(customerType);
         }
     },
-    NATURAL_PERSON("PN") {
+    //TARGETA-DEBITO
+    DEBIT_CARD("TD") {
+        @Override
+        public boolean equals(String customerType) {
+            return value.equals(customerType);
+        }
+    },
+    //CAJERO-AUTOMATICO
+    CASHIER("CA") {
+        @Override
+        public boolean equals(String customerType) {
+            return value.equals(customerType);
+        }
+    },
+    //TARGETA-CREDITO
+    CREDIT_CARD("TC") {
         @Override
         public boolean equals(String customerType) {
             return value.equals(customerType);
@@ -28,7 +44,7 @@ public enum CustomerType {
         return value.equals(customerType);
     }
 
-    private CustomerType(String value) {
+    private Modality(String value) {
         this.value = value;
     }
 }

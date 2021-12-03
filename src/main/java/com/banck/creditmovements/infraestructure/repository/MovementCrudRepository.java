@@ -48,14 +48,16 @@ public class MovementCrudRepository implements MovementRepository {
         Movement m = new Movement();
         m.setMovement(md.getMovement());
         m.setMovementType(md.getMovementType());
-        m.setCredit(md.getCredit());
-        m.setCreditType(md.getCreditType());
-        m.setCustomer(md.getCustomer());
-        m.setAmount(md.getAmount());
+        m.setSchedule(md.getSchedule());
+        m.setProduct(md.getProduct());
+        m.setModality(md.getModality());
         m.setConcept(md.getConcept());
+        m.setCustomer(md.getCustomer());
+        m.setObservations(md.getObservations());
+        m.setAmount(md.getAmount());
         m.setDate(md.getDate());
         m.setTime(md.getTime());
-        m.setCorrect(md.isCorrect());
+        m.setStatus(md.getStatus());
         return m;
     }
 
@@ -63,35 +65,24 @@ public class MovementCrudRepository implements MovementRepository {
         MovementDao md = new MovementDao();
         md.setMovement(m.getMovement());
         md.setMovementType(m.getMovementType());
-        md.setCredit(m.getCredit());
-        md.setCreditType(m.getCreditType());
-        md.setCustomer(m.getCustomer());
-        md.setAmount(m.getAmount());
+        md.setSchedule(m.getSchedule());
+        md.setProduct(m.getProduct());
+        md.setModality(m.getModality());
         md.setConcept(m.getConcept());
+        md.setCustomer(m.getCustomer());
+        md.setObservations(m.getObservations());
+        md.setAmount(m.getAmount());
         md.setDate(m.getDate());
         md.setTime(m.getTime());
-        md.setCorrect(m.isCorrect());
+        md.setStatus(m.getStatus());
         return md;
     }
 
     @Override
-    public Flux<Movement> listByCustomer(String customer) {
-        return movementRepository.findAllByCustomer(customer).map(this::MovementDaoToMovement);
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCredit(String customer, String credit) {
-        return movementRepository.findAllByCustomerAndAccount(customer, credit).map(this::MovementDaoToMovement);
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCreditAndCreditType(String customer, String credit, String creditType) {
+    public Flux<Movement> listBySchedule(String customer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Flux<Movement> listByAccount(String account) {
-        return movementRepository.findAllByAccount(account).map(this::MovementDaoToMovement);
-    }
+ 
 
 }

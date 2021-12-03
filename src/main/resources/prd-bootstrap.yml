@@ -1,0 +1,10 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: banckcredit-microservice
+  cloud:
+    config:
+      enable: true
+      uri: http://api-configserver:9997

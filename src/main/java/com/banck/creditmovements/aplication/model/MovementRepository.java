@@ -12,13 +12,7 @@ public interface MovementRepository {
 
     public Flux<Movement> list();
 
-    public Flux<Movement> listByCustomer(String customer);
-    
-    public Flux<Movement> listByAccount(String account);
-
-    public Flux<Movement> listByCustomerAndCredit(String customer, String credit);
-
-    public Flux<Movement> listByCustomerAndCreditAndCreditType(String customer, String credit, String creditType);
+    public Flux<Movement> listBySchedule(String customer);
 
     public Mono<Movement> get(String movement);
 

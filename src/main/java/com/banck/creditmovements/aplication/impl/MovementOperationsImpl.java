@@ -33,44 +33,7 @@ public class MovementOperationsImpl implements MovementOperations {
 
     @Override
     public Mono<Movement> create(Movement movement) {
-        AtomicReference<Mono<Movement>> atMovement = new AtomicReference<>();
-        Flux<Movement> lstMovements = movementRepository.listByAccount(movement.getCredit());
-
-        /*
-        if (CreditType.BUSINESS_CREDIT.equals(movement.getCreditType())) {
-
-            lstMovements.filter(act -> act.getMovementType().equals(movement.getMovementType()))
-                    .count()
-                    .subscribe(count -> {
-                        if (count == 0) {
-                            atAccount.set(movementRepository.create(movement));
-                        } else {
-                            atAccount.set(Mono.empty());
-                        }
-                    });
-        } else if (CreditType.PERSONAL_CREDIT.equals(movement.getCreditType())) {
-
-            lstMovements.filter(act -> act.getCreditType().equals(movement.getCreditType()))
-                    .count()
-                    .subscribe(count -> {
-                        if (count == 0) {
-                            atAccount.set(movementRepository.create(movement));
-                        } else {
-                            atAccount.set(Mono.empty());
-                        }
-                    });
-        } else {
-            atAccount.set(movementRepository.create(movement));
-        }
-         */
-        atMovement.set(movementRepository.create(movement));
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MovementOperationsImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return atMovement.get();
+        return movementRepository.create(movement);
     }
 
     @Override
@@ -84,23 +47,8 @@ public class MovementOperationsImpl implements MovementOperations {
     }
 
     @Override
-    public Flux<Movement> listByCustomer(String customer) {
-        return movementRepository.listByCustomer(customer);
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCredit(String customer, String credit) {
-        return movementRepository.listByCustomerAndCredit(customer, credit);
-    }
-
-    @Override
-    public Flux<Movement> listByCustomerAndCreditAndCreditType(String customer, String credit, String creditType) {
+    public Flux<Movement> listBySchedule(String customer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Flux<Movement> listByAccount(String movement) {
-        return movementRepository.listByAccount(movement);
     }
 
 }

@@ -8,19 +8,16 @@ package com.banck.creditmovements.utils;
  *
  * @author jonavcar
  */
-public enum CreditType {
-    PERSONAL_CREDIT("CP") {
+public enum Concept {
+    //PAGO-CUOTA
+    FEE_PAYMENT("PAGO-CUOTA") {
         @Override
         public boolean equals(String customerType) {
             return value.equals(customerType);
         }
     },
-    BUSINESS_CREDIT("CE") {
-        @Override
-        public boolean equals(String customerType) {
-            return value.equals(customerType);
-        }
-    }, CREDIT_CARD("CT") {
+    //PLAZO-CUOTA
+    DEADLINE_FEE("PLAZO-CUOTA") {
         @Override
         public boolean equals(String customerType) {
             return value.equals(customerType);
@@ -33,7 +30,7 @@ public enum CreditType {
         return value.equals(customerType);
     }
 
-    private CreditType(String value) {
+    private Concept(String value) {
         this.value = value;
     }
 }
