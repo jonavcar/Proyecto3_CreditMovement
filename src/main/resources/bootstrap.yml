@@ -1,0 +1,10 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: creditmovement-microservice
+  cloud:
+    config:
+      enable: true
+      uri: http://config-server.southcentralus.azurecontainer.io:9998

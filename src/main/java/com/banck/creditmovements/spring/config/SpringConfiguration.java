@@ -16,4 +16,5 @@ public class SpringConfiguration {
     public MovementRepository movementRepository() {
         return new MovementCrudRepository();
     }
+ 
 }

@@ -1,5 +1,6 @@
 package com.banck.creditmovements.infraestructure.rest;
 
+import com.banck.creditmovements.aplication.DebitAccountOperations;
 import com.banck.creditmovements.domain.Movement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,7 @@ import org.springframework.http.ResponseEntity;
  * @author jonavcar
  */
 @RestController
-@RequestMapping("/credit-movement")
+@RequestMapping("/mov-credit")
 @RequiredArgsConstructor
 public class MovementController {
 
@@ -41,6 +42,7 @@ public class MovementController {
     DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("America/Bogota"));
     private final MovementOperations operations;
+    private final DebitAccountOperations accountOperations;
 
     @GetMapping
     public Flux<Movement> listAll() {
@@ -155,6 +157,47 @@ public class MovementController {
             return operations.create(schedule).flatMap(scheduleRes -> {
                 return Mono.just(new ResponseEntity(scheduleRes, HttpStatus.OK));
             });
+        });
+    }
+
+    @PostMapping("/debit-card-payment")
+    public Mono<ResponseEntity> debitCardPayment(@RequestBody Movement movementReq) {
+        movementReq.setMovement("MV-" + getRandomNumberString());
+        movementReq.setDate(dateTime.format(formatDate));
+        movementReq.setTime(dateTime.format(formatTime));
+
+        return Mono.just(movementReq).flatMap(movement -> {
+
+            if (Optional.ofNullable(movement.getProduct()).isEmpty()) {
+                return Mono.just(new ResponseEntity("Debe ingresar la targeta de debito, Ejemplo { \"product\": \"TD-00000\" }", HttpStatus.BAD_REQUEST));
+            }
+
+            if (Optional.ofNullable(movement.getAmount()).isEmpty() || movement.getAmount() <= 0) {
+                return Mono.just(new ResponseEntity("Debe ingresar el monto, Ejemplo { \"amount\": 240 }", HttpStatus.BAD_REQUEST));
+            }
+
+            if (Optional.ofNullable(movement.getSchedule()).isEmpty()) {
+                return Mono.just(new ResponseEntity("Debe ingresar el cronograma a pagar, Ejemplo { \"schedule\": \"0000-1\" }", HttpStatus.BAD_REQUEST));
+            }
+
+            movement.setMovement(getRandomNumberString());
+            movement.setObservations("Amortizacion de la cuota "+ movementReq.getSchedule() +" con un abono de "+ movementReq.getAmount());
+            movement.setStatus("1");
+            movement.setModality(Modality.DEBIT_CARD.value);
+            movement.setMovementType(MovementType.PAYMENT.value);
+            movement.setConcept(Concept.FEE_PAYMENT.value);
+            movement.setProduct(movementReq.getProduct());
+            movement.setCustomer("");
+            return accountOperations.debitCardPayment(movement.getProduct(), movement.getAmount()).flatMap(tr -> {
+                
+                if (tr.getCode().equals("1")) {
+                    return operations.create(movement).flatMap(scheduleRes -> {
+                        return Mono.just(new ResponseEntity(scheduleRes, HttpStatus.OK));
+                    });
+                } else {
+                    return Mono.just(new ResponseEntity(tr.getMessage(), HttpStatus.BAD_REQUEST));
+                }
+            }).onErrorReturn(new ResponseEntity("Ocurrio un error en el servidor de Movimientos en Cuentas", HttpStatus.BAD_REQUEST));
         });
     }
 
