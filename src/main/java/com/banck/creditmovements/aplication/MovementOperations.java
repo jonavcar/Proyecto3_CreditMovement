@@ -14,6 +14,8 @@ public interface MovementOperations {
 
     public Flux<Movement> listBySchedule(String customer);
 
+    public Flux<Movement> listLast10CardMovements();
+
     public Mono<Movement> get(String movement);
 
     public Mono<Movement> create(Movement movement);

@@ -51,4 +51,9 @@ public class MovementOperationsImpl implements MovementOperations {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Flux<Movement> listLast10CardMovements() {
+        return movementRepository.list();
+    }
+
 }
