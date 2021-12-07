@@ -13,4 +13,6 @@ public interface IMovementCrudRepository extends ReactiveCrudRepository<Movement
     Flux<MovementDao> findAllBySchedule(String schedule);
 
     Flux<MovementDao> findAllByProduct(String product);
+    
+    Flux<MovementDao> findAllByCustomer(String customer);
 }

@@ -13,6 +13,8 @@ public interface MovementRepository {
     public Flux<Movement> list();
 
     public Flux<Movement> listBySchedule(String customer);
+    
+    public Flux<Movement> listByCustomer(String customer);
 
     public Mono<Movement> get(String movement);
 
