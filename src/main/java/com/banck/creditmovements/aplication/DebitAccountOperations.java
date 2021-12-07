@@ -1,6 +1,6 @@
 package com.banck.creditmovements.aplication;
 
-import com.banck.creditmovements.domain.AnyDto;
+import com.banck.creditmovements.DTO.AnyDto;
 import reactor.core.publisher.Mono;
 
 /**

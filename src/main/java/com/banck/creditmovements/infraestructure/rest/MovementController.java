@@ -1,7 +1,8 @@
 package com.banck.creditmovements.infraestructure.rest;
 
 import com.banck.creditmovements.aplication.DebitAccountOperations;
-import com.banck.creditmovements.domain.CardMovementDto;
+import com.banck.creditmovements.DTO.CardMovementDto;
+import com.banck.creditmovements.DTO.DateIDateF;
 import com.banck.creditmovements.domain.Movement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +23,13 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.banck.creditmovements.aplication.MovementOperations;
+import com.banck.creditmovements.DTO.ProductMovementDto;
 import com.banck.creditmovements.utils.Concept;
+import com.banck.creditmovements.utils.DateValidator;
+import com.banck.creditmovements.utils.DateValidatorUsingLocalDate;
 import com.banck.creditmovements.utils.Modality;
 import com.banck.creditmovements.utils.MovementType;
+import java.time.LocalDate;
 
 import java.util.Collection;
 import java.util.List;
@@ -82,14 +87,45 @@ public class MovementController {
     public Flux<CardMovementDto> reportLast10CardMovements() {
         return operations.listLast10CardMovements()
                 .filter(fm -> Optional.ofNullable(fm.getProduct()).isPresent()
-                        && Optional.ofNullable(fm.getModality()).isPresent())
+                && Optional.ofNullable(fm.getModality()).isPresent())
                 .filter(f2m -> f2m.getModality().equals(Modality.CREDIT_CARD.value)
-                        || f2m.getModality().equals(Modality.DEBIT_CARD.value))
+                || f2m.getModality().equals(Modality.DEBIT_CARD.value))
                 .groupBy(gb -> gb.getProduct())
                 .flatMap(gm -> {
                     return gm.takeLast(10).collectList().map(lm -> {
                         CardMovementDto cm = new CardMovementDto();
                         cm.setCard(gm.key());
+                        cm.setMovements(lm);
+                        return cm;
+                    });
+                });
+    }
+
+    @PostMapping("/product/movement/{customer}/list")
+    public Flux<ProductMovementDto> ProductMovementByCustomerAndDate(@PathVariable("customer") String customer, @RequestBody DateIDateF didf) {
+
+        DateValidator validator = new DateValidatorUsingLocalDate(formatDate);
+
+        if (!validator.isValid(didf.getDateI())) {
+            Throwable t = new Throwable();
+            return Flux.error(t, true);
+        }
+
+        if (!validator.isValid(didf.getDateF())) {
+            Throwable t = new Throwable();
+            return Flux.error(t, false);
+        }
+
+        return operations.listProductMovementBetweenDatesAndCustomer(customer, didf.getDateI(), didf.getDateF())
+                .filter(fm -> Optional.ofNullable(fm.getProduct()).isPresent()
+                && Optional.ofNullable(fm.getDate()).isPresent()
+                && !Optional.ofNullable(fm.getDate()).isEmpty())
+                .filter(fm -> isDateRange(didf.getDateI(), didf.getDateF(), fm.getDate()))
+                .groupBy(gb -> gb.getProduct())
+                .flatMap(gm -> {
+                    return gm.collectList().map(lm -> {
+                        ProductMovementDto cm = new ProductMovementDto();
+                        cm.setProduct(gm.key());
                         cm.setMovements(lm);
                         return cm;
                     });
@@ -253,5 +289,12 @@ public class MovementController {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
         return String.format("%06d", number);
+    }
+
+    public boolean isDateRange(String strDateI, String strDateF, String strDateC) {
+        LocalDate dateI = LocalDate.parse(strDateI, formatDate);
+        LocalDate dateF = LocalDate.parse(strDateF, formatDate);
+        LocalDate dateC = LocalDate.parse(strDateC, formatDate);
+        return ((dateC.isAfter(dateI) || dateC.isEqual(dateI)) && (dateC.isBefore(dateF) || dateC.isEqual(dateF)));
     }
 }

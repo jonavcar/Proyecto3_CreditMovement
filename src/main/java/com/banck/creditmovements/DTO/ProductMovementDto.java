@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.banck.creditmovements.domain;
+package com.banck.creditmovements.DTO;
+
+import com.banck.creditmovements.domain.Movement;
+import java.util.List;
 
 import lombok.Data;
 
@@ -11,10 +14,8 @@ import lombok.Data;
  * @author jnacarra
  */
 @Data
-public class DebitAccount {
+public class ProductMovementDto {
 
-    String status;
-    String debitCard;
-    double amount;
-    String message;
+    String product;
+    List<Movement> movements;
 }

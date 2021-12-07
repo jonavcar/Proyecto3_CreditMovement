@@ -2,12 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.banck.creditmovements.domain;
-
-import java.util.List;
+package com.banck.creditmovements.DTO;
 
 import lombok.Data;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -15,8 +12,10 @@ import reactor.core.publisher.Mono;
  * @author jnacarra
  */
 @Data
-public class CardMovementDto {
+public class ApiResponse {
 
-    String card;
-    List<Movement> movements;
+    String status;
+    String code;
+    String message;
+    Mono<?> mono;
 }

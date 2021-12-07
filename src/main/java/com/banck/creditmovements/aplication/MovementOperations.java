@@ -16,6 +16,8 @@ public interface MovementOperations {
 
     public Flux<Movement> listLast10CardMovements();
 
+    public Flux<Movement> listProductMovementBetweenDatesAndCustomer(String customer, String dateI, String dateF);
+
     public Mono<Movement> get(String movement);
 
     public Mono<Movement> create(Movement movement);

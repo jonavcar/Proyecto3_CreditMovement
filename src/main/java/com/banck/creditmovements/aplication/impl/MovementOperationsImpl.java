@@ -56,4 +56,9 @@ public class MovementOperationsImpl implements MovementOperations {
         return movementRepository.list();
     }
 
+    @Override
+    public Flux<Movement> listProductMovementBetweenDatesAndCustomer(String customer, String dateI, String dateF) {
+        return movementRepository.list();
+    }
+
 }

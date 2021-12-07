@@ -5,8 +5,8 @@
 package com.banck.creditmovements.aplication.impl;
 
 import com.banck.creditmovements.aplication.DebitAccountOperations;
-import com.banck.creditmovements.domain.AnyDto;
-import com.banck.creditmovements.domain.DebitAccount;
+import com.banck.creditmovements.DTO.AnyDto;
+import com.banck.creditmovements.DTO.DebitAccount;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
